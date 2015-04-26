@@ -1,0 +1,61 @@
+<modification>
+	<id>OpenCart 2.x Add Date Field To Reviews Admin-Panel</id>
+	<version>2.x</version>
+	<vqmver>2.x</vqmver>
+	<author>dodashright@gmail.com</author>
+
+    <file name="/admin/controller/catalog/review.php">
+        <operation>
+            <search position="after"><![CDATA[$data['entry_text'] = $this->language->get('entry_text');]]></search>
+            <add><![CDATA[$data['entry_date_added'] = $this->language->get('entry_date_added');]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[if (isset($this->request->post['text'])) {]]></search>
+            <add><![CDATA[
+                if (isset($this->request->post['date_added'])) {
+                    $data['date_added'] = $this->request->post['date_added'];
+                } elseif (!empty($review_info)) {
+                    $dateAdded = new \DateTime($review_info['date_added']);
+                    $data['date_added'] = $dateAdded->format('Y-m-d');
+                } else {
+                    $data['date_added'] = date('Y-m-d');
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="/admin/model/catalog/review.php">
+        <operation>
+            <search position="replace"><![CDATA[date_added = NOW()]]></search>
+            <add><![CDATA[date_added = '" . $this->db->escape($data['date_added']) . "']]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[date_modified = NOW()]]></search>
+            <add><![CDATA[date_added = '" . $this->db->escape($data['date_added']) . "', date_modified = NOW()]]></add>
+        </operation>
+    </file>
+
+    <file name="/admin/view/template/catalog/review_form.tpl">
+        <operation>
+            <search position="before" offset="1"><![CDATA[<label class="col-sm-2 control-label" for="input-text"><?php echo $entry_text; ?></label>]]></search>
+            <add><![CDATA[
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-date-added"><?php echo $entry_date_added; ?></label>
+                        <div class="col-sm-3">
+                          <div class="input-group date">
+                            <input type="text" name="date_added" value="<?php echo $date_added; ?>" placeholder="<?php echo $entry_date_added; ?>" data-date-format="YYYY-MM-DD" id="input-date-added" class="form-control">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span></div>
+                        </div>
+                      </div>
+                      <script type="text/javascript"><!--
+                        $('.date').datetimepicker({
+                          pickTime: false
+                        });
+                      //--></script>
+            ]]></add>
+        </operation>
+    </file>
+
+</modification>

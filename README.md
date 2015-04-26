@@ -12,3 +12,6 @@ If you want to change `date added` for your reviews this module can help you wit
 ## How to istall
 
 Just copy file into vqmod/xml directory
+
+## Contact
+dodashright@gmail.com
