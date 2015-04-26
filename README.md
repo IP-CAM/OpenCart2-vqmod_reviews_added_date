@@ -9,7 +9,7 @@ If you want to change `date added` for your reviews this module can help you wit
 1. OpenCart 2.x
 2. vqmod https://github.com/vqmod/vqmod
 
-## How to istall
+## How to install
 
 Just copy file into vqmod/xml directory
 
